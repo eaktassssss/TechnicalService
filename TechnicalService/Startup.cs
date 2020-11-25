@@ -44,7 +44,6 @@ namespace TechnicalService
          {
              options.LoginPath = "/Account/Login/";
          });
-
             services.AddDistributedRedisCache(x => { x.Configuration = "localhost:6379"; });
 
             services.AddScoped<ITechnicalService, TechnicalService.Services.Concrete.TechnicalService>();
