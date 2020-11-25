@@ -31,7 +31,6 @@ namespace TechnicalService
         {
             services.AddControllersWithViews();
             services.AddDbContext<TechnicalServiceContext>(sql => sql.UseSqlServer(Configuration.GetConnectionString("TechnicalServiceConString")));
-
             var mappingConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new MappingProfile());
