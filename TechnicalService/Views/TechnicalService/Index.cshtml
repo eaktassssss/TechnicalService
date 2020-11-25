@@ -1,0 +1,83 @@
+﻿@model List<TechnicalService.Dto.WorksDto>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Ad</th>
+                <th scope="col">Soyad</th>
+                <th scope="col">Telefon</th>
+                <th scope="col">Müşteri No</th>
+                <th scope="col">Ürün İsmi</th>
+                <th scope="col">Ürün Kategori</th>
+                <th scope="col">Marka</th>
+                <th scope="col">GS</th>
+                <th scope="col">Açıklama</th>
+                <th scope="col">Durum</th>
+                <th scope="col">Tarihi</th>
+                <th scope="col">Düzenle</th>
+                <th scope="col">İptal Et</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td scope="col">@item.FirstName</td>
+                <td scope="col">@item.LastName</td>
+                <td scope="col">@item.PhoneNumber</td>
+                <td scope="col">@item.CustomerNo</td>
+                <td scope="col">@item.ProductName</td>
+                <td scope="col">@item.CategoryName</td>
+                <td scope="col">@item.Brand</td>
+                <td scope="col">@item.InsurancePeriod</td>
+                <td scope="col"><button class="btn btn-warning btn-xs" id="btnDesc" data-id="@item.ProblemDescription">Açıklama</button></td>
+                @if (item.Status == 1)
+                {
+                    <td scope="col"><button class="btn btn-danger btn-xs" disabled>Beklemede</button></td>
+                }
+                else
+                {
+                    <td scope="col"><button class="btn btn-success btn-xs" disabled>Tamamlandı</button></td>
+                }
+                <td scope="col">@item.CreatedDate.ToString("dd.MM.yyyy")</td>
+                <td scope="col"><a href="@Url.Action("Edit","TechnicalService",new { id=@item.Id})"><button class="btn btn-primary btn-xs">Düzenle</button></a></td>
+                <td scope="col"><a href="@Url.Action("Delete","TechnicalService",new { id=@item.Id})"><button class="btn btn-danger btn-xs">Kapat</button></a></td>
+                <td scope="col"><a href="@Url.Action("ChangeStatus","TechnicalService",new { id=@item.Id})"><button class="btn btn-warning btn-xs">Değiştir</button></a></td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div class="modal fade" data-backdrop="true" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Arza Açıklaması</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="textBody">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        $(document).on("click", "#btnDesc", function () {
+            var data = $(this).attr("data-id");
+            $("#textBody").html(data);
+            $("#exampleModalCenter").modal("show");
+        });
+    </script>
+}
