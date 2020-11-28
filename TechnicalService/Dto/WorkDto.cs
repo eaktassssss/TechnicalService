@@ -9,6 +9,7 @@ namespace TechnicalService.Dto
 {
     public class WorkDto
     {
+        public int UserId { get; set; }
         public int Id { get; set; }
         [Required(ErrorMessage = "Zorunlu alan")]
         public string FirstName { get; set; }

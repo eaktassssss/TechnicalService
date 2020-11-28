@@ -17,5 +17,6 @@ namespace TechnicalService.Services.Abstract
         Task Delete(int id);
         Task<List<WorksDto>> GetAll();
         Task<List<Categories>> GetCategories();
+        Task<List<WorksDto>> GetAllByUserId(int userId);
     }
 }

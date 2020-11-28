@@ -42,10 +42,12 @@ namespace TechnicalService
          .AddCookie(options =>
          {
              options.LoginPath = "/Account/Login/";
+             options.AccessDeniedPath = new PathString("/Account/AccessDenied");
          });
             services.AddDistributedRedisCache(x => { x.Configuration = "localhost:6379"; });
-
             services.AddScoped<ITechnicalService, TechnicalService.Services.Concrete.TechnicalService>();
+
+
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {

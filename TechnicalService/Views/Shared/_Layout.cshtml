@@ -1,4 +1,11 @@
-﻿<!DOCTYPE html>
+﻿@using TechnicalService.Dto
+@using Newtonsoft.Json
+@using System.Security.Claims
+@{
+    var user = JsonConvert.DeserializeObject<ClaimDto>(User.Claims.Where(x => x.Type == ClaimTypes.Name).Select(x => x.Value).SingleOrDefault());
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -18,12 +25,15 @@
             <div class="collapse navbar-collapse" id="navbarColor01">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="@Url.Action("Add","TechnicalService")">
+                        <a class="nav-link" href="@Url.Action("Add", "TechnicalService")">
                             Yeni Kayıt
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="@Url.Action("Index","TechnicalService")">Kayıtlar</a>
+                        <a class="nav-link" href="@(user.Type == "Customer" ? Url.Action("CustomerPanel", "TechnicalService") : Url.Action("Index", "TechnicalService"))">Kayıtlar</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("LogOut","Account")">Çıkış</a>
                     </li>
                 </ul>
             </div>

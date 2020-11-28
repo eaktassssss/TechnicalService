@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -16,12 +17,9 @@ using TechnicalService.Services.Abstract;
 
 namespace TechnicalService.Controllers
 {
-
     [Authorize]
     public class TechnicalServiceController : Controller
     {
-
-
         IDistributedCache _distributedCache;
         ITechnicalService _technicalService;
         IMapper _mapper;
@@ -31,19 +29,48 @@ namespace TechnicalService.Controllers
             _technicalService = technicalService;
             _mapper = mapper;
         }
+
+
+        [Authorize(Roles ="ServiceManager")]
         [HttpGet]
         public async Task<ActionResult> Index()
         {
-            var cacheData = await _distributedCache.GetStringAsync("works");
+            var user = JsonConvert.DeserializeObject<ClaimDto>(User.Claims.Where(x => x.Type == ClaimTypes.Name).Select(x => x.Value).SingleOrDefault());
+            var cacheData = await _distributedCache.GetStringAsync("servicemanager");
             if (cacheData == null)
             {
                 var data = await _technicalService.GetAll();
-                _distributedCache.SetString("works", JsonConvert.SerializeObject(data));
+                if (data.Any())
+                {
+                    await _distributedCache.SetStringAsync("servicemanager", JsonConvert.SerializeObject(data));
+                }
                 return View(data);
             }
             else
             {
-                var data = JsonConvert.DeserializeObject<List<WorksDto>>(cacheData);
+                var data = JsonConvert.DeserializeObject<List<WorksDto>>(await _distributedCache.GetStringAsync("servicemanager"));
+                return View(data);
+            }
+        }
+
+        [Authorize(Roles = "Customer")]
+        [HttpGet]
+        public async Task<ActionResult> CustomerPanel()
+        {
+            var user = JsonConvert.DeserializeObject<ClaimDto>(User.Claims.Where(x => x.Type == ClaimTypes.Name).Select(x => x.Value).SingleOrDefault());
+            var cacheData = await _distributedCache.GetStringAsync("customer");
+            if (cacheData == null)
+            {
+                var data = await _technicalService.GetAllByUserId(user.Id);
+                if (data.Any())
+                {
+                    await _distributedCache.SetStringAsync("customer", JsonConvert.SerializeObject(data));
+                }
+                return View(data);
+            }
+            else
+            {
+                var data = JsonConvert.DeserializeObject<List<WorksDto>>(await _distributedCache.GetStringAsync("customer"));
                 return View(data);
             }
         }
@@ -62,6 +89,8 @@ namespace TechnicalService.Controllers
                 return View(worksDto);
 
             }
+            var user = JsonConvert.DeserializeObject<ClaimDto>(User.Claims.Where(x => x.Type == ClaimTypes.Name).Select(x => x.Value).FirstOrDefault());
+            worksDto.UserId = user.Id;
             await _technicalService.Add(worksDto);
             await _distributedCache.RemoveAsync("works");
             return RedirectToAction("Index", "TechnicalService");

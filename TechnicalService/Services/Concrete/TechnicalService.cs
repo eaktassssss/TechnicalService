@@ -6,6 +6,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using TechnicalService.Dto;
+using TechnicalService.Enums;
 using TechnicalService.Models;
 using TechnicalService.Services.Abstract;
 
@@ -68,26 +69,45 @@ namespace TechnicalService.Services.Concrete
         }
         public async Task<List<WorksDto>> GetAll()
         {
-            var response = await (from work in _databaseContex.Works
-                                  join
-                                  category in _databaseContex.Categories on
-                                  work.CategoryId equals category.Id
-                                  select new WorksDto
-                                  {
-                                      CategoryName = category.Name,
-                                      LastName = work.LastName,
-                                      PhoneNumber = work.PhoneNumber,
-                                      CustomerNo = work.CustomerNo,
-                                      ProductName = work.ProductName,
-                                      InsurancePeriod = work.InsurancePeriod,
-                                      CreatedDate = work.CreatedDate,
-                                      Brand = work.Brand,
-                                      FirstName = work.FirstName,
-                                      Status = work.Status,
-                                      ProblemDescription = work.ProblemDescription,
-                                      Id = work.Id
-                                  }).ToListAsync();
-            return response;
+            var data = await _databaseContex.Works.Include(x => x.Categories).Select(x => new WorksDto
+            {
+
+                CategoryName = x.Categories.Name,
+                LastName = x.LastName,
+                PhoneNumber = x.PhoneNumber,
+                CustomerNo = x.CustomerNo,
+                ProductName = x.ProductName,
+                InsurancePeriod = x.InsurancePeriod,
+                CreatedDate = x.CreatedDate,
+                Brand = x.Brand,
+                FirstName = x.FirstName,
+                Status = x.Status,
+                ProblemDescription = x.ProblemDescription,
+                Id = x.Id,
+                UserId = x.UserId
+            }).OrderByDescending(z => z.Id).ToListAsync();
+            return data;
+        }
+        public async Task<List<WorksDto>> GetAllByUserId(int userId)
+        {
+            var data = await _databaseContex.Works.Include(x => x.Categories).Select(x => new WorksDto
+            {
+
+                CategoryName = x.Categories.Name,
+                LastName = x.LastName,
+                PhoneNumber = x.PhoneNumber,
+                CustomerNo = x.CustomerNo,
+                ProductName = x.ProductName,
+                InsurancePeriod = x.InsurancePeriod,
+                CreatedDate = x.CreatedDate,
+                Brand = x.Brand,
+                FirstName = x.FirstName,
+                Status = x.Status,
+                ProblemDescription = x.ProblemDescription,
+                Id = x.Id,
+                UserId = x.UserId
+            }).Where(x=>x.UserId==userId).OrderByDescending(z => z.Id).ToListAsync();
+            return data;
         }
 
         public async Task<List<Categories>> GetCategories()
