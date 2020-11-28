@@ -51,7 +51,7 @@ namespace TechnicalService.Services.Concrete
             var entity = await _databaseContex.Set<T>().FirstOrDefaultAsync(expression);
             return entity;
         }
-        public async Task<List<WorksDto>> GetAllByUserId(int userId)
+        public async Task<List<WorksDto>> GetAllByUserId()
         {
             var data = await _databaseContex.Works.Include(x => x.Categories).Select(x => new WorksDto
             {
@@ -69,7 +69,7 @@ namespace TechnicalService.Services.Concrete
                 ProblemDescription = x.ProblemDescription,
                 Id = x.Id,
                 UserId = x.UserId
-            }).Where(x => x.UserId == userId).OrderByDescending(z => z.Id).ToListAsync();
+            }).OrderByDescending(z => z.Id).ToListAsync();
             return data;
         }
         public async Task<List<CategoryDto>> GetCategories()

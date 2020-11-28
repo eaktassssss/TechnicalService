@@ -14,7 +14,7 @@ namespace TechnicalService.Services.Abstract
         Task Add(WorkDto worksDto);
         Task Update(WorkDto worksDto);
         Task<List<CategoryDto>> GetCategories();
-        Task<List<WorksDto>> GetAllByUserId(int userId);
+        Task<List<WorksDto>> GetAllByUserId();
         Task Delete(int id);
     }
 }

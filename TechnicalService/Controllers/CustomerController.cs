@@ -26,6 +26,7 @@ namespace TechnicalService.Controllers
             _customerService = customerService;
             _mapper = mapper;
         }
+        List<WorksDto> data;
         [HttpGet]
         public async Task<ActionResult> Index()
         {
@@ -33,18 +34,17 @@ namespace TechnicalService.Controllers
             var cacheData = await _distributedCache.GetStringAsync("customer");
             if (cacheData == null)
             {
-                var data = await _customerService.GetAllByUserId(user.Id);
+                data = await _customerService.GetAllByUserId();
                 if (data.Any())
                 {
                     await _distributedCache.SetStringAsync("customer", JsonConvert.SerializeObject(data));
                 }
-                return View(data);
             }
             else
             {
-                var data = JsonConvert.DeserializeObject<List<WorksDto>>(await _distributedCache.GetStringAsync("customer"));
-                return View(data);
+                data = JsonConvert.DeserializeObject<List<WorksDto>>(await _distributedCache.GetStringAsync("customer"));
             }
+            return View(data.Where(x => x.UserId == user.Id).ToList());
         }
         [HttpGet]
         public async Task<ActionResult> Add()
