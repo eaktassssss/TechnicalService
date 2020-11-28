@@ -50,9 +50,9 @@ namespace TechnicalService.Controllers
                 switch (user.Type)
                 {
                     case "Customer":
-                        return RedirectToAction("CustomerPanel", "TechnicalService");
+                        return RedirectToAction("Index", "Customer");
                     case "ServiceManager":
-                        return RedirectToAction("Index", "TechnicalService");
+                        return RedirectToAction("Index", "Manager");
                     default:
                         throw new Exception("Not Found User");
                 }
@@ -65,8 +65,9 @@ namespace TechnicalService.Controllers
             return RedirectToAction("Login", "Account");
         }
 
-        public async Task<ActionResult> AccessDenied()
+        public ActionResult AccessDenied()
         {
+
             return View();
         }
 

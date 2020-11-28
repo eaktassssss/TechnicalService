@@ -12,29 +12,13 @@ using TechnicalService.Services.Abstract;
 
 namespace TechnicalService.Services.Concrete
 {
-    public class TechnicalService : ITechnicalService
+    public class ManagerService : IManagerService
     {
         TechnicalServiceContext _databaseContex;
-        IMapper _mapper;
-        public TechnicalService(TechnicalServiceContext databaseContex, IMapper mapper)
+        public ManagerService(TechnicalServiceContext databaseContex)
         {
             _databaseContex = databaseContex;
-            _mapper = mapper;
         }
-        public async Task Add(WorkDto worksDto)
-        {
-            try
-            {
-                var entity = _mapper.Map<Works>(worksDto);
-                _databaseContex.Works.Add(entity);
-                await _databaseContex.SaveChangesAsync();
-            }
-            catch (Exception exception)
-            {
-                throw new Exception(exception.Message);
-            }
-        }
-
         public async Task ChangeStatus(int id)
         {
             try
@@ -48,7 +32,6 @@ namespace TechnicalService.Services.Concrete
                 throw new Exception(exception.Message);
             }
         }
-
         public async Task Delete(int id)
         {
             try
@@ -88,46 +71,8 @@ namespace TechnicalService.Services.Concrete
             }).OrderByDescending(z => z.Id).ToListAsync();
             return data;
         }
-        public async Task<List<WorksDto>> GetAllByUserId(int userId)
-        {
-            var data = await _databaseContex.Works.Include(x => x.Categories).Select(x => new WorksDto
-            {
 
-                CategoryName = x.Categories.Name,
-                LastName = x.LastName,
-                PhoneNumber = x.PhoneNumber,
-                CustomerNo = x.CustomerNo,
-                ProductName = x.ProductName,
-                InsurancePeriod = x.InsurancePeriod,
-                CreatedDate = x.CreatedDate,
-                Brand = x.Brand,
-                FirstName = x.FirstName,
-                Status = x.Status,
-                ProblemDescription = x.ProblemDescription,
-                Id = x.Id,
-                UserId = x.UserId
-            }).Where(x=>x.UserId==userId).OrderByDescending(z => z.Id).ToListAsync();
-            return data;
-        }
 
-        public async Task<List<Categories>> GetCategories()
-        {
-            return await _databaseContex.Categories.ToListAsync();
-        }
 
-        public async Task Update(WorkDto worksDto)
-        {
-            try
-            {
-                var entity = _mapper.Map<Works>(worksDto);
-                var entry = _databaseContex.Entry(entity);
-                entry.State = EntityState.Modified;
-                await _databaseContex.SaveChangesAsync();
-            }
-            catch (Exception exception)
-            {
-                throw new Exception(exception.Message);
-            }
-        }
     }
 }

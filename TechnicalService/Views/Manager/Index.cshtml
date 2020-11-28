@@ -1,6 +1,6 @@
 ﻿@model List<TechnicalService.Dto.WorksDto>
 @{
-    ViewData["Title"] = "CustomerPanel";
+    ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <div class="container">
@@ -18,8 +18,8 @@
                 <th scope="col">Açıklama</th>
                 <th scope="col">Durum</th>
                 <th scope="col">Tarihi</th>
-                <th scope="col">Düzenle</th>
-                <th scope="col">İptal Et</th>
+                <th scope="col">Kapat</th>
+                <th scope="col">Değiştir</th>
             </tr>
         </thead>
         <tbody>
@@ -44,8 +44,8 @@
                         <td scope="col"><button class="btn btn-success btn-xs" disabled>Tamamlandı</button></td>
                     }
                     <td scope="col">@item.CreatedDate.ToString("dd.MM.yyyy")</td>
-                    <td scope="col"><a href="@Url.Action("Edit","TechnicalService",new { id=@item.Id})"><button class="btn btn-primary btn-xs">Düzenle</button></a></td>
-                    <td scope="col"><a href="@Url.Action("Delete","TechnicalService",new { id=@item.Id})"><button class="btn btn-danger btn-xs">Kapat</button></a></td>
+                    <td scope="col"><a href="@Url.Action("Delete","Manager",new { id=@item.Id})"><button class="btn btn-danger btn-xs">Kapat</button></a></td>
+                    <td scope="col"><a href="@Url.Action("ChangeStatus","Manager",new { id=@item.Id})"><button class="btn btn-warning btn-xs">Değiştir</button></a></td>
                 </tr>
             }
         </tbody>
@@ -79,4 +79,3 @@
         });
     </script>
 }
-

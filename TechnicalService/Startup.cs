@@ -17,6 +17,7 @@ using Microsoft.VisualBasic;
 using TechnicalService.Mapping;
 using TechnicalService.Models;
 using TechnicalService.Services.Abstract;
+using TechnicalService.Services.Concrete;
 
 namespace TechnicalService
 {
@@ -45,7 +46,8 @@ namespace TechnicalService
              options.AccessDeniedPath = new PathString("/Account/AccessDenied");
          });
             services.AddDistributedRedisCache(x => { x.Configuration = "localhost:6379"; });
-            services.AddScoped<ITechnicalService, TechnicalService.Services.Concrete.TechnicalService>();
+            services.AddScoped<IManagerService, ManagerService>();
+            services.AddScoped<ICustomerService, CustomerManager>();
 
 
         }

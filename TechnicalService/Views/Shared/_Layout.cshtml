@@ -24,13 +24,16 @@
 
             <div class="collapse navbar-collapse" id="navbarColor01">
                 <ul class="navbar-nav mr-auto">
+                    @if (user.Type == "Customer")
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("Add", "Customer")">
+                                Yeni Kayıt
+                            </a>
+                        </li>
+                    }
                     <li class="nav-item">
-                        <a class="nav-link" href="@Url.Action("Add", "TechnicalService")">
-                            Yeni Kayıt
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="@(user.Type == "Customer" ? Url.Action("CustomerPanel", "TechnicalService") : Url.Action("Index", "TechnicalService"))">Kayıtlar</a>
+                        <a class="nav-link" href="@(user.Type == "Customer" ? Url.Action("Index", "Customer") : Url.Action("Index", "Manager"))">@(user.Type=="Customer"?"Çağrılarım":"Açılan Çağrılar")</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="@Url.Action("LogOut","Account")">Çıkış</a>
@@ -47,7 +50,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2020 - TechnicalService - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; @DateTime.Now.Year - Redis Caching - <a href="http://evrenaktas.com">evrenaktas.com</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

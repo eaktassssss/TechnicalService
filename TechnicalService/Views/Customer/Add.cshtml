@@ -1,21 +1,19 @@
 ﻿@model TechnicalService.Dto.WorkDto
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Add";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
+
 <style>
-    .text-danger {
-        color: red;
-        font-weight: bold;
-        font-size: 10px;
+    .text-danger{
+        color:red;font-weight:bold;font-size:10px;
     }
 </style>
 
-<h1>Servis Talep Kaydı Düzenle</h1>
+    <h1>Servis Talep Kaydı Girişi</h1>
 <br />
-<form asp-action="Edit" asp-controller="TechnicalService" method="post">
-    <input type="hidden" asp-for="Id" value="@Model.Id" />
-    <input type="hidden" asp-for="UserId" value="@Model.UserId" />
+<form asp-action="Add" asp-controller="Customer" method="post">
     <div class="form-row">
         <div class="form-group col-md-3">
             <label for="exampleFormControlInput1">Ad</label>
@@ -52,8 +50,7 @@
 
         <div class="form-group col-md-3">
             <label for="exampleFormControlInput1">Garanti Süresi</label>
-            <input type="text" asp-for="InsurancePeriod" class="form-control">
-            <span asp-validation-for="InsurancePeriod" class="text-danger"></span>
+            <input type="number" asp-for="InsurancePeriod" class="form-control">
         </div>
         <div class="form-group col-md-3">
             <label for="exampleFormControlInput1">Marka</label>
@@ -66,6 +63,5 @@
         <textarea class="form-control" asp-for="ProblemDescription" id="exampleFormControlTextarea1" rows="5"></textarea>
         <span asp-validation-for="ProblemDescription" class="text-danger"></span>
     </div>
-    <button type="submit" class="btn btn-success btn-block">Düzenle</button>
+    <button type="submit" class="btn btn-success btn-block">Kaydet</button>
 </form>
-

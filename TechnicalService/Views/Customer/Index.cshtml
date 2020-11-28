@@ -3,7 +3,6 @@
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
 <div class="container">
     <table class="table">
         <thead>
@@ -26,29 +25,28 @@
         <tbody>
             @foreach (var item in Model)
             {
-            <tr>
-                <td scope="col">@item.FirstName</td>
-                <td scope="col">@item.LastName</td>
-                <td scope="col">@item.PhoneNumber</td>
-                <td scope="col">@item.CustomerNo</td>
-                <td scope="col">@item.ProductName</td>
-                <td scope="col">@item.CategoryName</td>
-                <td scope="col">@item.Brand</td>
-                <td scope="col">@item.InsurancePeriod</td>
-                <td scope="col"><button class="btn btn-warning btn-xs" id="btnDesc" data-id="@item.ProblemDescription">Açıklama</button></td>
-                @if (item.Status == 1)
-                {
-                    <td scope="col"><button class="btn btn-danger btn-xs" disabled>Beklemede</button></td>
-                }
-                else
-                {
-                    <td scope="col"><button class="btn btn-success btn-xs" disabled>Tamamlandı</button></td>
-                }
-                <td scope="col">@item.CreatedDate.ToString("dd.MM.yyyy")</td>
-                <td scope="col"><a href="@Url.Action("Edit","TechnicalService",new { id=@item.Id})"><button class="btn btn-primary btn-xs">Düzenle</button></a></td>
-                <td scope="col"><a href="@Url.Action("Delete","TechnicalService",new { id=@item.Id})"><button class="btn btn-danger btn-xs">Kapat</button></a></td>
-                <td scope="col"><a href="@Url.Action("ChangeStatus","TechnicalService",new { id=@item.Id})"><button class="btn btn-warning btn-xs">Değiştir</button></a></td>
-            </tr>
+                <tr>
+                    <td scope="col">@item.FirstName</td>
+                    <td scope="col">@item.LastName</td>
+                    <td scope="col">@item.PhoneNumber</td>
+                    <td scope="col">@item.CustomerNo</td>
+                    <td scope="col">@item.ProductName</td>
+                    <td scope="col">@item.CategoryName</td>
+                    <td scope="col">@item.Brand</td>
+                    <td scope="col">@item.InsurancePeriod</td>
+                    <td scope="col"><button class="btn btn-warning btn-xs" id="btnDesc" data-id="@item.ProblemDescription">Açıklama</button></td>
+                    @if (item.Status == 1)
+                    {
+                        <td scope="col"><button class="btn btn-danger btn-xs" disabled>Beklemede</button></td>
+                    }
+                    else
+                    {
+                        <td scope="col"><button class="btn btn-success btn-xs" disabled>Tamamlandı</button></td>
+                    }
+                    <td scope="col">@item.CreatedDate.ToString("dd.MM.yyyy")</td>
+                    <td scope="col"><a href="@Url.Action("Edit","Customer",new { id=@item.Id})"><button class="btn btn-primary btn-xs">Düzenle</button></a></td>
+                    <td scope="col"><a href="@Url.Action("Delete","Customer",new { id=@item.Id})"><button class="btn btn-danger btn-xs">Kapat</button></a></td>
+                </tr>
             }
         </tbody>
     </table>
@@ -81,3 +79,4 @@
         });
     </script>
 }
+
