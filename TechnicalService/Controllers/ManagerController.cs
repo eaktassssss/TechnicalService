@@ -20,31 +20,15 @@ namespace TechnicalService.Controllers
     [Authorize(Roles = "ServiceManager")]
     public class ManagerController : Controller
     {
-        IDistributedCache _distributedCache;
-        IManagerService _technicalService;
-        public ManagerController(IDistributedCache distributedCache, IManagerService technicalService)
+        IManagerService _managerService;
+        public ManagerController(IManagerService managerService)
         {
-            _distributedCache = distributedCache;
-            _technicalService = technicalService;
+            _managerService = managerService;
         }
         public async Task<ActionResult> Index()
         {
-            var cacheData = await _distributedCache.GetStringAsync("manager");
-            if (cacheData == null)
-            {
-                var data = await _technicalService.GetAll();
-                if (data.Any())
-                {
-                    await _distributedCache.SetStringAsync("manager", JsonConvert.SerializeObject(data));
-                }
-                return View(data);
-            }
-            else
-            {
-                var cacheDate = await _distributedCache.GetStringAsync("manager");
-                var data = JsonConvert.DeserializeObject<List<WorksDto>>(cacheDate);
-                return View(data);
-            }
+            var response = await _managerService.GetAll();
+            return View(response);
         }
         public async Task<ActionResult> Delete(int id)
         {
@@ -52,8 +36,7 @@ namespace TechnicalService.Controllers
             {
                 return BadRequest();
             }
-            await _technicalService.Delete(id);
-            await _distributedCache.RemoveAsync("manager");
+            await _managerService.Delete(id);
             return RedirectToAction("Index", "Manager");
         }
         public async Task<ActionResult> ChangeStatus(int id)
@@ -62,8 +45,7 @@ namespace TechnicalService.Controllers
             {
                 return BadRequest();
             }
-            await _technicalService.ChangeStatus(id);
-            await _distributedCache.RemoveAsync("manager");
+            await _managerService.ChangeStatus(id);
             return RedirectToAction("Index", "Manager");
         }
     }

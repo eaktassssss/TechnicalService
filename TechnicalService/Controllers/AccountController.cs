@@ -17,11 +17,9 @@ namespace TechnicalService.Controllers
     public class AccountController : Controller
     {
         TechnicalServiceContext _databaseContext;
-        IDistributedCache _distributedCache;
-        public AccountController(TechnicalServiceContext databaseContext, IDistributedCache distributedCache)
+        public AccountController(TechnicalServiceContext databaseContext)
         {
             _databaseContext = databaseContext;
-            _distributedCache = distributedCache;
         }
         [HttpGet]
         public ActionResult Login()

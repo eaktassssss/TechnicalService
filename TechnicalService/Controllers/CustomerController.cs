@@ -17,34 +17,19 @@ namespace TechnicalService.Controllers
     [Authorize(Roles = "Customer")]
     public class CustomerController : Controller
     {
-        IDistributedCache _distributedCache;
         ICustomerService _customerService;
         IMapper _mapper;
-        public CustomerController(IDistributedCache distributedCache, ICustomerService customerService, IMapper mapper)
+        public CustomerController(ICustomerService customerService, IMapper mapper)
         {
-            _distributedCache = distributedCache;
             _customerService = customerService;
             _mapper = mapper;
         }
-        List<WorksDto> data;
         [HttpGet]
         public async Task<ActionResult> Index()
         {
             var user = JsonConvert.DeserializeObject<ClaimDto>(User.Claims.Where(x => x.Type == ClaimTypes.Name).Select(x => x.Value).SingleOrDefault());
-            var cacheData = await _distributedCache.GetStringAsync("customer");
-            if (cacheData == null)
-            {
-                data = await _customerService.GetAllByUserId();
-                if (data.Any())
-                {
-                    await _distributedCache.SetStringAsync("customer", JsonConvert.SerializeObject(data));
-                }
-            }
-            else
-            {
-                data = JsonConvert.DeserializeObject<List<WorksDto>>(await _distributedCache.GetStringAsync("customer"));
-            }
-            return View(data.Where(x => x.UserId == user.Id).ToList());
+            var response = await _customerService.GetByUserId(user.Id);
+            return View(response.Where(x => x.UserId == user.Id).ToList());
         }
         [HttpGet]
         public async Task<ActionResult> Add()
@@ -64,7 +49,7 @@ namespace TechnicalService.Controllers
             var user = JsonConvert.DeserializeObject<ClaimDto>(User.Claims.Where(x => x.Type == ClaimTypes.Name).Select(x => x.Value).FirstOrDefault());
             worksDto.UserId = user.Id;
             await _customerService.Add(worksDto);
-            await _distributedCache.RemoveAsync("customer");
+
             return RedirectToAction("Index", "Customer");
         }
         [HttpGet]
@@ -82,7 +67,6 @@ namespace TechnicalService.Controllers
                 return View(worksDto);
             }
             await _customerService.Update(worksDto);
-            await _distributedCache.RemoveAsync("customer");
             return RedirectToAction("Index", "Customer");
         }
         public async Task<ActionResult> Delete(int id)
@@ -92,7 +76,6 @@ namespace TechnicalService.Controllers
                 return BadRequest();
             }
             await _customerService.Delete(id);
-            await _distributedCache.RemoveAsync("customer");
             return RedirectToAction("Index", "Customer");
         }
 
