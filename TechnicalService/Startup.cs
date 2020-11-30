@@ -48,8 +48,6 @@ namespace TechnicalService
             services.AddDistributedRedisCache(x => { x.Configuration = "localhost:6379"; });
             services.AddScoped<IManagerService, ManagerService>();
             services.AddScoped<ICustomerService, CustomerManager>();
-
-
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
