@@ -90,7 +90,7 @@ namespace TechnicalService.Services.Concrete
             }
             else
             {
-                var data = JsonConvert.DeserializeObject<List<WorksDto>>(await _distributedCache.GetStringAsync("servicerecords"));.Where(x => x.UserId == userId).ToList();
+                var data = JsonConvert.DeserializeObject<List<WorksDto>>(await _distributedCache.GetStringAsync("servicerecords")).Where(x => x.UserId == userId).ToList();
                 return data;
             }
         }
