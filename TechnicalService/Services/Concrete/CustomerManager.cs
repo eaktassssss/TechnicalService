@@ -90,7 +90,7 @@ namespace TechnicalService.Services.Concrete
             }
             else
             {
-                var data = JsonConvert.DeserializeObject<List<WorksDto>>(await _distributedCache.GetStringAsync("customer")).Where(x => x.UserId == userId).ToList();
+                var data = JsonConvert.DeserializeObject<List<WorksDto>>(await _distributedCache.GetStringAsync("servicerecords"));.Where(x => x.UserId == userId).ToList();
                 return data;
             }
         }
@@ -106,7 +106,7 @@ namespace TechnicalService.Services.Concrete
                 var entry = _databaseContex.Entry(entity);
                 entry.State = EntityState.Modified;
                 await _databaseContex.SaveChangesAsync();
-                await _distributedCache.RemoveAsync("customer");
+                await _distributedCache.RemoveAsync("servicerecords");
             }
             catch (Exception exception)
             {
